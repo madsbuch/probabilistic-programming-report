@@ -1,4 +1,10 @@
 # PL and ML Report
+
+Download PDF [here](https://github.com/madsbuch/probabilistic-programming-report/raw/master/main.pdf).
+
+This report is discontinued as is. It is continued as an online book on
+[learn.madsbuch.com](http://learn.madsbuch.com/u/dashboard/books).
+
 Building:
 
     pdflatex -shell-escape main.tex
