@@ -1,0 +1,30 @@
+\section{Sampling}
+In this section, we look a bit further into sampling. Sampling is necessary
+because it is the only method that seems tractable for arbitrary
+distributions. Hence we wish to be able to express the other queries through
+sampling. This idea is fundamental for \cite{Park:2008, Mansinghka:2009, Scibior:2015}
+
+The issue on sampling also tabs into the difference between
+\emph{discriminative} and \emph{generative} models.
+The approach described in this text takes offset in generative models. A complete comparison of the two
+approaches is out of scope for the report. However, the go-to paper on this
+is \cite{Ng:2002}. The conclusion of the article is that for performance oriented applications
+we should use discriminative models. Discriminative models solely
+model conditional distributions and therefore are not general enough to capture
+all uses of probabilities.
+
+The motivation is the tractability of doing exact calculations of certain properties
+about probability distributions. Given a normally distributed five character string (in the
+interval 'aaaaa' .. 'zzzzz'), I can sample at a rate of 22MB (~3MSamples) per second
+while it takes 3.348 seconds to calculate the exact expectation of an element in
+the distribution.
+
+The Main two points we emphasize is that it takes linear time to sample (in a graphical
+model) where it takes exponential time to do exact queries (traversing trees). This complexity difference,
+naturally, comes with a trade-off; We can only do approximate queries from sampling.
+
+For machine learning applications sampling is usually fine. We need approximate
+queries. They just have to answer well within range. On the other hand, doing
+formal reasoning makes it strictly harder to use sampling. The conclusion is that
+sampling is useful in empiric domains but it is not ideal in 
+strictly formal domains.

@@ -1,0 +1,44 @@
+% Motivation
+One of the tasks using probabilistic reasoning is machine learning.
+Machine learning is a very broad field collecting research from many
+different areas. This foundation makes it a rather daunting area to study within
+as many ideas, and approaches are in play.
+
+% Introduction
+The general goal, however, is to come up with a function resembling some real world
+process generating some data. The literature proposes several ways for deriving these
+functions though following are, what I find to be, two central ways to achieve this.
+
+\begin{itemize}
+    \item \textbf{Inference:} The central idea here is to have a proposal
+      distribution. For each observation, we condition the distribution.
+      The task is to infer a posterior distribution from the prior
+      distribution and all its conditioning. In \cite{Scibior:2015}, the
+      authors used this approach.
+    \item \textbf{Optimization:} Again, we have a proposal distribution.
+      This distribution contains potentially several variables in the
+      range $]0;1]$ each representing a random choice. The task is then to
+      optimize these variables to yield a distribution that matches the
+      proposal data.
+\end{itemize}
+
+The Hakaru project is one of the promising, relevant, techniques \cite{NarayananCRSZ16}.
+They model the problem as a joint
+distribution and then turn it into a conditional distribution. This approach is general,
+and model developers can use to develop generative models, which is also those we focus on in this
+report.
+
+Traditionally the field has a great focus on speed over expressibility.
+This goal leads to an algorithmic centric view which has no coherent
+foundation. Furthermore, most algorithms are developed using discriminative
+models as these are faster but more restricted \cite{Ng:2002}.
+To mitigate that, a research industry of applying probabilistic
+reasoning to learning tasks is emerging.
+
+In this chapter we will look at a simple example building a distribution
+from a list of elements. It is simple, yet illustrative. The central point
+is that it is very hard to talk about machine learning in general terms.
+The material is in plenty. Hence a project is necessary
+to guide through the ocean of knowledge.
+
+

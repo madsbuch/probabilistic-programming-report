@@ -1,0 +1,78 @@
+\section{Entropy}
+Sometimes we are interested in how random a distribution is. We
+cover this question under the term entropy. The notion entropy often defaults
+to what was defined by Shannon, i.e. what is the lower bound of
+the number of bits we need to do a transmission. However, other notions exist,
+defined on some other metrics being more useful in some applications.
+
+For this report, we will look at two types of entropy: Shannon entropy and
+min-entropy. They differ in how they fundamentally approach the question
+of entropy in information science and their applications.
+
+The machine learning community widely uses the Shannon entropy
+where we seek to decrease the entropy as much as possible to a concise
+description of some data. Its origins as a mean to discuss compression
+of data, and as such it is used in compression based models.
+
+On the other hand, min-entropy is proposed to be the notion used in
+information flow as it takes a more conservative approach to the
+concept of entropy.
+
+Following to this is a presentation on the implementations showing
+how the entropy discussion fits into the Ramsey's probability monad.
+It will be evident that it is indeed possible to implement it and
+use it in real applications for sufficiently small distributions.
+
+\subsection{Implementations}
+We used Ramsey's probability monad to calculate entropies.
+This was because their monad supports the \emph{support}
+and the \emph{expectation} query. These can also be implemented in
+an exact manner in Petchers monad but will be hard to realize in
+Scibiors. In Scibiors monad we would approximate entropy
+through sampling. This approximation becomes infeasible
+when the domain of the distribution gets bigger.
+
+% Implementation of shannon entropy
+
+\begin{figure}[H]
+\begin{minted}{haskell}
+shannon :: (Eq a, Ord a) => P a -> Double
+shannon px = 
+  let
+      exp x = expectThat px x
+   in
+      sum ( map (\x -> (exp x) * 
+                       (logBase 2 $ (1 / exp x))) $ supp px )
+\end{minted}
+\caption{The implementation of the Shannon entropy as written in \cite{Smith:2009}.}
+\label{code:shannon}
+\end{figure}
+
+The code in Figure \ref{code:shannon} shows the Haskell implementation of the
+Shannon entropy. It uses some functions not explicitly defined though it should be
+immediate from their names what they do. From the last line, it is apparent that it
+maps over the full domain of the distribution and sums the result. Though this
+problem is embarrassingly parallel, its complexity still outperforms computing power
+for interesting distributions.
+
+% Implementation of min entropy
+Above implementation was proposed bad for the application of quantitative information
+flow as it classified. Instead, Smith proposes to use the min-entropy notion for evaluating
+distributions and their information leakage \cite{Smith:2009}.
+
+\begin{figure}[H]
+\begin{minted}{haskell}
+condVuln :: (Ord x, Ord y) => (P y -> P x) -> P y -> Double
+condVuln px py = sum [(expectThat py y) * 
+                      (vuln $ px $ return y) | y <- supp py]
+
+condMinEntropy px py = logBase 2 (1/(condVuln pl ph))
+\end{minted}
+\caption{The implementation of the the entropy entropy as written in \cite{Smith:2009}.}
+\label{code:min-entropy}
+\end{figure}
+
+The implementation in Figure \ref{code:min-entropy} shows how we implemented min-entropy through
+Ramsey's probability monad. Again it completely resembles the implementation
+from \cite{Smith:2009} and it has the same complexity concerns as the other implementation.
+

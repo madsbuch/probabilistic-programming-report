@@ -1,0 +1,16 @@
+\section{Quantitative Information Flow}
+In quantitative information flow, we are interested in how much data
+flows from one entity to another. These entities can be variables in
+a programming language, processes in a computer, etc.
+
+In the setting of security, we are particularly interested in how much information
+flows from secret data source to public data source of a system. These variables
+can represent information in both a direct or indirect manner. 
+An example of an indirect data source is the response time from another process
+to derive information about some private data in the service.
+
+In this section, we will first take a look at some clean examples to establish
+the vocabulary. After that, we will look into a password checker, where we try
+to derive how much information we get about the users in the database simply
+by looking at timing.
+

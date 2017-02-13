@@ -1,0 +1,202 @@
+\section{Monadic Structure}
+Monads make out a good choice to encapsulate probability distributions.
+They provide a natural way to lift values to a distribution and to compose
+distributions from existing ones.
+
+In this section, we seek to investigate probabilities using
+monads. The core structure is identical for all of them, but other than that,
+there is no consensus on these frameworks. We will look at
+some of the ideas and try to compare them.
+
+The ideas are from following papers \cite{Ramsey:2002, Scibior:2015, Petcher:2015, Park:2008}.
+\cite{Ramsey:2002, Scibior:2015} both use a purely monadic style implemented in Haskell,
+while \cite{Petcher:2015} implemented it in Coq. Both of these choices make good sense taking
+their goals into consideration. 
+In \cite{Park:2008} they develop a language
+which structure resembles the monad.
+
+The core functions implemented for monads are \emph{bind}
+and \emph{return}. They are the same in both Ramsey's, and
+Scibior's implementations, namely that \emph{bind} resembles a composition and
+return is the Dirac distribution. Park implemented bind through
+sampling with all expressions 
+lifted through the use of the \emph{prob} construction.
+
+The differences lay in what auxiliary functions their frameworks provide.
+
+\subsection{Operations}
+After having defined the core monadic structure, we implement
+some operations that let us perform some useful tasks with monads. They are
+different depending on who you ask, their application,
+and what constraints they impose.
+
+For learning tasks of large domains, we want to be able to sample because it is infeasible
+to consider the full domain. In information flow, we want to be able to
+derive the entropy of a distribution. For this, we need a \emph{support} query and an
+\emph{expectation} query. For sufficiently large domains we will also use the Monte
+Carlo methods for expectation and support, but more on that in the sampling section.
+
+\subsection{Implementations}
+Having looked into the monad approach to probability distributions, we will now
+elaborate on the implementations. We will take a look at their
+design motivations and how they compare.
+
+Fundamentally all the monads have the same core functions. That is, the
+\emph{return} operator is the Dirac distribution that forms a distribution of
+a single value with an expectation of 1. The \emph{bind} operator amounts to
+draw from one distribution to constitute another distribution.
+
+Now, these two constructions do not introduce random choices in any ways.
+Their purpose is primarily there for modeling reasons.
+
+The following implementations are interesting in the way they tackle the task
+of introducing randomness, and what features they emphasize.
+
+% Ramseys monad - descrete but easy to express exact operations
+% Scibior       - Clean and based on sampling and conditioning
+% Petcher       - emphasis on
+
+% Parks         - Emphasis on sampling, but unclean architecture
+
+% RAMSEY
+
+Ramsey's monad \cite{Ramsey:2002} augments the standard monad constructors by
+a choice operator. The operator takes a probability, $p$. This 
+probability is a number between zero and one. It then returns one of two
+other expressions with probability respectively $p$ and $p-1$.
+
+The \emph{choose} operator is simple in the sense that it is how we think
+about stochastic lambda calculus. It makes it possible to implement the
+\emph{support} query, and the \emph{expectation} query using exact implementations.
+This is desirable for any application using the entropy of a distribution or
+otherwise in need of these queries. They are, however, slow for
+large distributions which should not come as a surprise, as the \emph{choose}
+operator introduces probability distributions with exponential fan-out.
+
+Furthermore, it is possible to implement the \emph{sample} query widely
+used in any applications that need approximate queries.
+
+\begin{figure}[H]
+\begin{minted}{haskell}
+data P a where
+    Return :: a -> P a
+    Bind   :: P a -> (a -> P b) -> P b -- The reason for GADTs
+    Choose :: Probability -> P a -> P a -> P a
+\end{minted}
+\caption{The algebraic definition of the probability monad from \cite{Ramsey:2002}.}
+\label{code:ramsey-monad}
+\end{figure}
+
+Figure \ref{code:ramsey-monad} shows the implementation using monadic terms. We
+could also have implemented it using measures. This way would, however, 
+pose a limit on implementing the \emph{support} query. Such an implementation
+would include enumerating the entire domain of the probability distribution. for
+each element we would need to calculate the expectation and exclude it if the
+expectation is 0.
+
+Lastly, we mention that this implementation only works for discrete
+distributions, again, due to the \emph{choose} operator. That choice gives
+rise to some applications, e.g., propositional reasoning, but makes other applications
+harder.
+
+% SCIBIOR
+Next, we look at Scibiors implementation \cite{Scibior:2015}.
+
+This implementation extends the monad with a \emph{primitive} operator and
+a \emph{conditional} operator. This implementation is from the paper titled
+\emph{Practical Probabilistic Programming with Monads} and has a heavy focus
+on the machine learning aspect of probabilistic programming. As such, none of these
+added operators provide a good fit for exact queries. They do, however, make it
+much easier to do sampling and conditioning. It is even possible to encode
+continuous distributions in this implementation.
+
+\begin{figure}[H]
+\begin{minted}{haskell}
+data Dist a where
+    Return      :: a -> Dist a
+    Bind        :: Dist b -> (b -> Dist a) -> Dist a
+    Primitive   :: Sampleable d => d a -> Dist a
+    Conditional :: (a -> Prob) -> Dist a -> Dist a
+\end{minted}
+\caption{The algebraic definition of the probability monad from \cite{Scibior:2015}.}
+\label{code:scibior-monad}
+\end{figure}
+
+The code in Figure \ref{code:scibior-monad} is the algebraic definition of the code
+from the paper. The two first cases are not particularly interesting.
+The \emph{Primitive} constructor takes anything that implements the \emph{Sampleable}
+type class and lifts it into the monad. This lifting includes external functions
+and is the reason why we can make arbitrary distributions.
+
+The \emph{Conditional} constructor is used to condition a probability distribution.
+To do this,
+we need a function calculating the likelihood of an element and a prior
+probability distribution.
+We then get a conditioned distribution. It is not possible to sample from that.
+First, we need to \emph{infer} the posterior distribution.
+
+Next, we have an implementation with a goal of supporting propositional reasoning.
+Aside from the usual constructors, we consider the \emph{Rnd} and the \emph{Repeat}
+constructors. The biggest difference from this to the others is, that
+it makes randomness completely explicit when we ask for a vector of random bits.
+
+\begin{figure}[H]
+\begin{minted}{coq}
+Inductive Comp : Set -> Type :=
+| Ret : forall {A : Set}{H: EqDec A}, A -> Comp A
+| Bind : forall {A B : Set}, Comp B -> (B -> Comp A) -> Comp A
+| Rnd : forall n, Comp (Bvector n)
+| Repeat : forall {A : Set}, Comp A -> (A -> bool) -> Comp A.
+\end{minted}
+\caption{The algebraic definition of the probability monad in \cite{Petcher:2015}.}
+\label{code:petcher-monad}
+\end{figure}
+
+Figure \ref{code:petcher-monad} shows the implementation used in their paper.
+The \emph{Ret} and \emph{Bind} are the usual monad constructors for the probability
+monad.
+\emph{Rnd} is the constructor
+that exposes randomness. It returns an \emph{n}-sized vector of random bits, which then
+has to be utilized by the application routines. The last constructor, \emph{Repeat}, 
+is used to do a kind of conditioning on a distribution. This conditioning could aid
+sampling in some interval on a distribution over natural numbers.
+
+% PARK
+The last implementation is from \cite{Park:2008}. They went with a complete formulation
+of a language rather than implementing it as a DSL in an existing language.
+They base the language on the idea of lifting entire terms into a \emph{circle}-type
+on which we can do sampling.
+
+Other operations they implemented in the language are the \emph{expectation} query
+and the \emph{Bayes} operation, which is essentially inference. They are both
+implemented through sampling and need an argument on how much data to
+sample to approximate the queries.
+We may embed both of the queries in a probabilistic term, e.g. we can do an
+expectation query within a distribution.
+
+Furthermore, the sampling based algorithms use a global randomness pool.
+This global approach results in computations with side effects which
+are notoriously hard to reason about.
+
+While this might seem like a good idea, it makes it hard to reason about the
+distribution as a whole and certainly breaks compositionality. Therefore
+this approach is mostly here for completeness and reference.
+
+% Discussion and comparison
+
+\textbf{Final remarks:} All above implementations are different. From here it is hard
+to say whether one is better than another as they all suit different goals. The one
+by Ramsey emphasizes a general purpose implementation that is conceptually simple.
+However, they did not emphasize inference.
+
+Scibior made a monad with the particular aim of being specialized to inference
+based on sampling. They indeed succeeded in that, but this implementation
+would not be useful in the security context where rigorous introspection or
+entropy of large distributions is the question. Hence he made a good
+implementation for Machine learning.
+
+Lastly, Petcher made a monad specialized towards doing formal reasoning.
+Among other things, the way he handles randomness is very suited this goal.
+The monad provides randomness as a vector of discrete values. This approach
+makes it well suited for the purpose. However, it is not natural to express
+random computations.

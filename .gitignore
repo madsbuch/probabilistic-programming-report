@@ -1,0 +1,8 @@
+*.aux
+*.spl
+*.out
+*.log
+*.blg
+*.bbl
+_minted-main
+

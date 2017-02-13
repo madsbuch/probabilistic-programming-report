@@ -1,0 +1,69 @@
+\section{Propositional Reasoning}
+% Introduction af section
+Probability is a general term that many contexts use. Inferring
+from samples yield a learning perspective while calculating the entropy of a
+probability distribution is interesting in an information-theoretic setting. In this section,
+we look into frameworks for propositional reasoning. In particular, we look
+into the methodology developed for reasoning about cryptographic proofs
+from the FCF paper\cite{Petcher:2015}.
+
+% Mål for propositoinel tilgang
+The key thing we reason about is the equivalence of distributions. Being able to
+do this allows us to drag a pair of probability distributions into the world
+of propositions. With such a notion, we can further develop the theory to
+incorporate logical connectors.
+
+% monadisk tilgang (ret, bind, rnd, repeat)
+The core monadic approach used is the same as the formulation in Ramsey's
+paper. Concretely they use the formulation based on measure terms here, i.e.
+the continuation monad that returns a probability for a given input. In this
+context, they formulate it in Gallina (Coq), as opposed to Haskell, which also 
+makes sense, as we get many things out of the box.
+
+% Diskrete distribution, endelig support, 
+Finally, as this is propositional reasoning, we need to have terminating
+computations to have a sound system. For this, we require discrete probability
+distributions with a finite support. This requirement also yields a value of 1 when summing
+the expectations of the whole support.
+
+\subsection{Relating Distributions}
+As mentioned we want a notion of equivalence for the distributions we consider.
+For this, two cases have been derived as theorems, one where the distributions
+are identical and one where they have a mutual bound.
+
+% Direkte ækvivalente
+For directly equal probability distributions we simply treat the distributions as pure
+functions. In this context, it yields their probability mass functions. For this
+property to be satisfied, we need that, for each input the PMFs yield
+the same mass. Notice that this is not a bound, and as such,
+the masses have to be identical.
+
+This property is the Theorem 4 from the FCF paper.
+
+% Inækvivalens
+Furthermore, we want to reason about bounds of probabilities. To do that in this
+framework they have introduced the notion of bad events that might occur in a
+probability distribution. This approach is in the spirit of the identical until bad games
+from \cite{Bellare:2006}.
+
+
+\subsection{Program Logic}
+To express richer logical statements about a distribution they develop a
+Hoare logic. They design the logic in two stages. The Probabilistic
+Relational Postcondition Logic (PRPL) allows to reason about pot conditions
+of a probability distribution. The idea for this is to be
+able to set up a formula $\Phi$ to relate two computations under:
+
+\begin{align}
+    p \sim q \{ \Phi\} 
+\end{align}
+
+Given PRPL it is straightforward to define the Probabilistic Relational
+Hoare Logic (PRHL). By that, we can reason relationally about probabilities in
+the following form:
+
+\begin{align}
+    \{ \Psi \} p \sim q \{ \Phi\} 
+\end{align}
+
+This section forms the foundation to build cryptographic game proofs.

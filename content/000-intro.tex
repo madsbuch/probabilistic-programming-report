@@ -1,0 +1,45 @@
+% What approach should we take?
+% 1. A motivation
+% 2. An introduction
+% 3. An overview
+
+% Motivation
+Probabilistic reasoning is ubiquitous in computer science. It is in
+all places where we do not have complete information. Here we need to
+approximate, to guess or to predict some value. The applications for
+probabilistic reasoning are wide, but even so, we try to delve into
+some general notions of probabilistic reasoning.
+
+For machine learning, which is the first application we delve into,
+the key goal is to predict. The idea is that, given
+some data, we may be able to predict the outcome of a future event. 
+It should be possible to do that. After all,
+it is what we constantly do as human beings.
+
+Next, after machine learning, we will look at the applications of
+probabilistic reasoning in security. Concretely we look at two areas
+that rely on probabilistic techniques: Quantitative information flow
+and cryptography.
+
+The motivation for quantitative information is to figure out how much
+information flows between entities in a system. These entities can
+be timing modeled formally.
+
+In Cryptography we seek to support the strength of our cryptographic
+protocols. We develop these proofs through games where an adversary has
+to guess better than picking at random. Here probabilistic reasoning
+is at the core when defining bounds on security.
+
+% Introduction
+This technical report we will provide an overview of the current
+research directions within probabilistic programming. The first section
+will provide an overview of the area with a strong offset in a monadic
+formulation of probabilities.
+
+After that, we will look into select areas of probabilistic programming such
+as sampling, entropy, and propositional reasoning using probabilities.
+
+The two last parts of the report is a dive into machine learning
+and how we use probabilistic programming in that setting.
+This part is followed up by one on security elaborating on quantitative
+information flow and cryptography.

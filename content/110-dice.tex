@@ -1,0 +1,27 @@
+\section{Dice}
+To have an illustrative example of a learning task, we will attempt to learn the
+distribution of a dice based on a list of dice rolls. We use frequencies as our
+main approach. This method is useful when considering large amounts of data.
+
+\begin{figure}
+\begin{minted}{haskell}
+observe :: a -> (Int, P a) -> (Int, P a)
+observe e (t, prior) = let t' = t+1 in
+        (t'+1, choose (1/(fromIntegral t')) (return e) prior)
+\end{minted}
+\caption{A function that takes an observation and adjust the distribution.}
+\label{code:dice}
+\end{figure}
+
+In \ref{code:dice} the function \emph{observe} takes an element and a distribution
+of the same type as the element. The input distribution is augmented by a count
+of elements already observed. Now we choose that element by $\frac{1}{N}$.
+Doing this yields a uniformly distributed distribution over all elements it
+has observed, given that all elements are unique. If multiple elements are the
+same, we sum their expectations.
+
+We wrapped the probability distributions in a tuple of the distribution and the
+total count of elements it has observed. We need this total count to calculate
+how much impact the new element should have. In this approach we let the impact
+of the new element be inversely proportional to the number of elements we already
+saw. As we also noted, this yields an inductive uniform distribution.

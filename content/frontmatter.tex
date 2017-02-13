@@ -1,0 +1,70 @@
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\title{Probabilistic Programming}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author{Mads Buch}
+
+\address{Aarhus, Denmark}
+
+\begin{abstract}
+Probabilistic programming is pervasive in all computations considering
+incomplete data, and this is a large domain. As such,
+strong abstractions and formalizations are necessary to program efficiently.
+In this article, we will look into fundamental techniques for probabilistic
+programming. In particular, we will take offset in the monadic structure of
+probabilities.
+
+We will apply these developed techniques in two areas: Machine Learning and
+Security. In machine learning the goal task is given some amounts of data, to
+make a function that fits that data. We will take offset in a simple application
+considering dice rolls.
+
+As for security, we will look into 
+quantitative information flow and cryptography. Here we are respectively
+interested in
+limits on how much information is observable from some entity and to what
+extent two distributions are equivalent. For the information flow perspective on
+the entropy of a probability distribution while we take a look at some logics that allow
+propositional reasoning about probability distributions to look into the
+relation between two distributions.
+\end{abstract}
+
+\begin{keyword}
+Probabilistic Programming Languages \sep Machine learning \sep quantitative
+information flow \sep Cryptography \sep Programming Languages
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+\newpage

@@ -1,0 +1,156 @@
+%% This is file `elsarticle-template-1-num.tex',
+%%
+%% Copyright 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%%
+%% $Id: elsarticle-template-1-num.tex 149 2009-10-08 05:01:15Z rishi $
+%% $URL: http://lenova.river-valley.com/svn/elsbst/trunk/elsarticle-template-1-num.tex $
+%%
+\documentclass[preprint,12pt]{elsarticle}
+
+\makeatletter
+\def\ps@pprintTitle{%
+   \let\@oddhead\@empty
+   \let\@evenhead\@empty
+   \let\@oddfoot\@empty
+   \let\@evenfoot\@oddfoot
+}
+\makeatother
+
+% \documentclass[preprint,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+%% \usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+\usepackage{amsmath}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+\usepackage{marginnote}
+\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{epigraph}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+
+%\journal{Journal Name}
+
+\begin{document}
+
+\input{content/frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+%\linenumbers
+
+%% main text
+\part{Overview}
+
+\input{content/000-intro.tex}
+
+% Basic PL view of probabilities
+% A Probabilistic Language Based on Sampling Functions
+\input{content/001-monad.tex} % Stochastic Lambda Calculus and Monads of Probability Distributions
+\input{content/002-semantics.tex}
+
+% Select operations
+\input{content/010-disintegration.tex} % Symbolic Bayesian Inference by Lazy Partial Evaluation
+\input{content/011-sampling.tex} % Natively Probabilistic Computation
+\input{content/012-entropy.tex}
+
+% Constructive and propositional way of thinking of probabilities.
+\input{content/020-inference.tex} 
+\input{content/021-propositional-reasoning.tex}
+
+\input{content/030-research-questions.tex}
+
+\newpage
+\part{Machine Learning}
+\epigraph{Don't calculate probabilities; 
+  Sample good guesses.}{\textit{Vikash Kumar \cite{Mansinghka:2009}}}
+% Applications of probabilistic reasoning where inference is its
+% core
+% Practical Probabilistic Programming with Monads
+\input{content/100-intro.tex}
+\input{content/110-dice.tex}
+
+\newpage
+\part{Security}
+% The area where propositional reasoning is at core
+\input{content/200-intro.tex}
+
+% On the Foundations of Quantitative Information Flow
+\input{content/210-quantitative.tex}
+\input{content/211-motivation.tex}
+\input{content/212-password.tex}
+
+% The Foundational Cryptography Framework
+\input{content/220-crypto.tex}
+
+\bibliographystyle{model1-num-names}
+\bibliography{bibliography.bib}
+
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-1-num.tex'.

@@ -1,0 +1,35 @@
+\subsection{Motivation and Entropy}
+In Smiths paper, \cite{Smith:2009}, he presents two expressions.
+They both leak information from a variable \emph{h} (denoting
+high security and should be secure) to another variable \emph{l} (denoting
+low security and is publicly available).
+
+\begin{figure}[H]
+\begin{minted}{text}
+if h mod 8 == 0
+    then l = h
+    else l = 1
+\end{minted}
+\caption{Example of leakage from \cite{Smith:2009}.}
+\label{code:leak-1}
+\end{figure}
+
+\begin{figure}[H]
+\begin{minted}{text}
+l = h & 0^(7k−1)1^(k+1)
+\end{minted}
+\caption{Example of leakage from \cite{Smith:2009}.}
+\label{code:leak-2}
+\end{figure}
+
+The first expression, Figure \ref{code:leak-1}, leaks all
+data with a probability of $\frac{1}{8}$ where the other
+expression, Figure \ref{code:leak-2} always leaks a fraction
+of the high variable.
+
+Using the Shannon entropy, the two programs leak equally much
+information indifferent of $k$. The leak is worse \ref{code:leak-1} which motivates to
+find another notion of entropy for this setting.
+
+Smith proposes the notion of min-entropy. This notion makes sense as it
+is a more conservative measure of entropy.
